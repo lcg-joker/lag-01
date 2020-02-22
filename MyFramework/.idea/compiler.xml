@@ -6,7 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="lag-01" />
+        <module name="MyFramework-test" />
+        <module name="MyFramework" />
       </profile>
     </annotationProcessing>
   </component>
