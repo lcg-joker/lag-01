@@ -1,0 +1,14 @@
+<mapper namespace="com.lcg.dao.UserDao">
+
+    <!--定位每条SQL必须是  statementId=namespace.id  -->
+    <select id="findAll" resultType="com.lcg.entity.User">
+        select * from user
+    </select>
+
+
+    <select id="findOne" resultType="com.lcg.entity.User" paramterType="com.lcg.entity.User">
+        select * from user where id=#{id} and username=#{userName}
+    </select>
+
+
+</mapper>
