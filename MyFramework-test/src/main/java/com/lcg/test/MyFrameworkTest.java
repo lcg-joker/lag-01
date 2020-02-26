@@ -6,10 +6,8 @@ import com.lcg.io.Resources;
 import com.lcg.sqlSession.SqlSession;
 import com.lcg.sqlSession.SqlSessionFactory;
 import com.lcg.sqlSession.SqlSessionFactoryBuilder;
-import org.dom4j.DocumentException;
 import org.junit.Test;
 
-import java.beans.PropertyVetoException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -28,14 +26,46 @@ public class MyFrameworkTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         User user = new User();
-        user.setId("1");
-        user.setUserName("lcg");
-
-
+        user.setId("3");
+        user.setUserName("ddd");
+        user.setAge(11);
+        //获取代理对象
         UserDao userDao = sqlSession.getMapper(UserDao.class);
-        List<User> all = userDao.findAll();
-        for (User o : all) {
-            System.out.println("id:" + o.getId() + ",username:" + o.getUserName() + ",age:" + o.getAge());
-        }
+        userDao.addUser(user);
+
     }
+
+
+    @Test
+    public void test1() throws Exception {
+        InputStream resourcesAsSteam = Resources.getResourcesAsSteam("sqlMapConfig.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourcesAsSteam);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        User user = new User();
+        user.setId("3");
+        user.setUserName("dd3d");
+        user.setAge(111);
+        //获取代理对象
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        userDao.updateUser(user);
+
+    }
+
+
+    @Test
+    public void test2() throws Exception {
+        InputStream resourcesAsSteam = Resources.getResourcesAsSteam("sqlMapConfig.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourcesAsSteam);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        //获取代理对象
+        UserDao userDao = sqlSession.getMapper(UserDao.class);
+        userDao.deleteUser("3");
+
+    }
+
+
+
+
 }

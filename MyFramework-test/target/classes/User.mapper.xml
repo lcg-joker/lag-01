@@ -5,10 +5,21 @@
         select * from user
     </select>
 
-
-    <select id="findOne" resultType="com.lcg.entity.User" paramterType="com.lcg.entity.User">
+    <select id="findOne" resultType="com.lcg.entity.User">
         select * from user where id=#{id} and username=#{userName}
     </select>
 
+
+    <insert id="addUser" paramterType="com.lcg.entity.User">
+        insert into user values(#{id},#{userName},#{age})
+    </insert>
+
+    <update id="updateUser" paramterType="com.lcg.entity.User">
+        update user set username=#{userName} , age=#{age} where id=#{id}
+    </update>
+
+    <delete id="deleteUser" paramterType="java.lang.String">
+        delete from user where id=#{id}
+    </delete>
 
 </mapper>

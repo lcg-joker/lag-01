@@ -32,10 +32,21 @@ public class XMLMapperBuilder {
     public void parse(InputStream inputStream) throws DocumentException {
 
         Document document = new SAXReader().read(inputStream);
+
         Element rootElement = document.getRootElement();
+
         String namespace = rootElement.attributeValue("namespace");
 
-        List<Element> list = rootElement.selectNodes("//select");
+        addAllMappedStatementMapByType(rootElement, namespace, "select");
+        addAllMappedStatementMapByType(rootElement, namespace, "insert");
+        addAllMappedStatementMapByType(rootElement, namespace, "update");
+        addAllMappedStatementMapByType(rootElement, namespace, "delete");
+
+    }
+
+
+    private void addAllMappedStatementMapByType(Element rootElement, String namespace, String type) {
+        List<Element> list = rootElement.selectNodes("//" + type);
         for (Element element : list) {
             String id = element.attributeValue("id");
             String resultType = element.attributeValue("resultType");
@@ -49,7 +60,6 @@ public class XMLMapperBuilder {
             String key = namespace + "." + id;
             configuration.getMappedStatementMap().put(key, mappedStatement);
         }
-
     }
 
 

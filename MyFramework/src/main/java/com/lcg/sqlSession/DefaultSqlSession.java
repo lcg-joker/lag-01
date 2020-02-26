@@ -1,5 +1,6 @@
 package com.lcg.sqlSession;
 
+import com.lcg.invocation.MapperProxy;
 import com.lcg.pojo.Configuration;
 import com.lcg.pojo.MappedStatement;
 
@@ -45,6 +46,36 @@ public class DefaultSqlSession implements SqlSession {
         }
     }
 
+    @Override
+    public void add(String statementId, Object... params) throws Exception {
+        //获取MappedStatement对象
+        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementId);
+        //构造执行对象
+        SimpleExecutor simpleExecutor = new SimpleExecutor();
+        //执行sql
+        simpleExecutor.update(configuration, mappedStatement, params);
+    }
+
+    @Override
+    public void update(String statementId, Object... params) throws Exception {
+        //获取MappedStatement对象
+        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementId);
+        //构造执行对象
+        SimpleExecutor simpleExecutor = new SimpleExecutor();
+        //执行sql
+        simpleExecutor.update(configuration, mappedStatement, params);
+    }
+
+    @Override
+    public void delete(String statementId, Object... params) throws Exception {
+        //获取MappedStatement对象
+        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementId);
+        //构造执行对象
+        SimpleExecutor simpleExecutor = new SimpleExecutor();
+        //执行sql
+        simpleExecutor.update(configuration, mappedStatement, params);
+    }
+
 
     /**
      * 获取JDK
@@ -56,34 +87,8 @@ public class DefaultSqlSession implements SqlSession {
      */
     @Override
     public <T> T getMapper(Class<?> className) {
-
-
-        Object newProxyInstance = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{className}, new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-                //代理对象不管调用什么方法 都 会运行此方法,底层是执行的JDBC代码，所以要再此处调用findAll 或者 fineOne
-
-                //参数1 准备statementId
-                //方法名称
-                String methodName = method.getName();
-                //方法所在类的全路径名
-                String className = method.getDeclaringClass().getName();
-                String statementId = className + "." + methodName;
-
-
-                //参数2 params=args
-
-                //取出方法的返回值类型
-                Type genericReturnType = method.getGenericReturnType();
-                //判断返回值是否泛型参数化
-                if (genericReturnType instanceof ParameterizedType) {
-                    return findAll(statementId, args);
-                }
-                return findOne(statementId, args);
-            }
-        });
-
+        //创建代理对象
+        Object newProxyInstance = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{className}, new MapperProxy(this));
         return (T) newProxyInstance;
     }
 }

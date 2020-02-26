@@ -46,4 +46,6 @@ public class MappedStatement {
     public void setSql(String sql) {
         this.sql = sql;
     }
+
+
 }
